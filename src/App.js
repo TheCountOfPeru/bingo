@@ -185,10 +185,8 @@ class Board extends React.Component {
 
   render() {
     return (
-      <div class=" ml-auto mr-auto w-auto ">
-      <div class="text-center text-7xl ">
-        BINGO
-      </div>       
+      <div class=" ml-auto mr-auto w-auto mt-40">
+     
         {this.renderBoard()}
         <div class="">
           <button class={buttonCss} onClick={this.drawNumber}>Draw</button>
