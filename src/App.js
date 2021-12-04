@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-
+import ReactToPrint, { useReactToPrint } from "react-to-print";
 
 
 const LetterBoxCss = "border-2 border-solid border-black text-center focus:outline-none float-left text-white bg-black w-8 h-8 text-sm 2xl:w-24 2xl:h-24 2xl:text-7xl xl:w-20 xl:h-20 xl:text-4xl lg:w-16 lg:h-16 lg:text-2xl md:w-12 md:h-12 md:text-lg sm:w-8 sm:h-8 sm:text-sm flex items-center justify-center"
@@ -218,19 +218,13 @@ class Game extends React.Component{
       <div class=" flex flex-row">
       <Board handleClickGoToMenu={this.props.handleClickGoToMenu}/>
       </div>
-      <footer class="border-t border-gray-400 fixed w-full left-0 bottom-0  ">
-        <div class="flex flex-wrap justify-center ">
-          <ul class="flex items-center">
-            Made by Jonathan Yee
-          </ul>
-        </div>
-    </footer>
+
     </>
     );
   }
 }
 
-class Sheet extends React.Component{
+class Card extends React.Component{
   render(){
     const css="border-2 border-solid border-black text-center focus:outline-none float-left bg-white w-36 h-36 flex items-center justify-center text-8xl"
     const bingoArray = generateBingoBoardValueArray()
@@ -289,28 +283,52 @@ class Sheet extends React.Component{
   }
 }
 
-function Sheets (props){
-  
-    const sheets = [];
-    for (let i = 0; i < props.value; i++) {
-      sheets.push(<Sheet id={1}/>)
+class Cards extends React.Component{
+  constructor(props) {   
+    super(props);    
+    this.state = {      
     }
-
+    
+  }
+  render(){
+    const sheets = [];
+    for (let i = 0; i < this.props.value; i++) {
+      sheets.push(<Card id={1}/>)
+    }
     return(
       <>
-      <div class=" flex items-center justify-center text-8xl m-6">
-        {props.value} pages ready to print. Instructions and back button.
-      </div>
       <div>
-      <button class="after:table after:clear-both bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-4 px-8 border border-blue-500 hover:border-transparent rounded text-sm 2xl:text-5xl xl:text-4xl md:text-2xl sm:text-sm mx-10 my-3" onClick={props.handleClickStartBingo}>Start Bingo</button>
-      <button class="after:table after:clear-both bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-4 px-8 border border-blue-500 hover:border-transparent rounded text-sm 2xl:text-5xl xl:text-4xl md:text-2xl sm:text-sm mx-10 my-3" onClick={props.handleClickGoToMenu}>Menu</button>
+      {sheets}
       </div>
-      <div>{sheets}</div>
       </>
     );
-  
+  }
+
 }
 
+class CardsToPrint extends React.Component {
+  constructor(props) {   
+    super(props);    
+    this.state = {      
+    }
+    
+  }
+  render() {
+    return (
+      <>
+      <div class=" flex flex-row">
+      <ReactToPrint
+          trigger={() => <button class={buttonCss}>Print Bingo Cards</button>}
+          content={() => this.componentRef}
+        />
+      <button class={buttonCss} onClick={this.props.handleClickStartBingo}>Start Bingo</button>
+      <button class={buttonCss} onClick={this.props.handleClickGoToMenu}>Menu</button>
+      </div>
+      <Cards ref={el => (this.componentRef = el)} value={this.props.value}/>
+      </>
+    );
+  }
+}
 class Menu extends React.Component{
   constructor(props) {   
     super(props);    
@@ -366,11 +384,18 @@ class Menu extends React.Component{
         </form>
         </div>
         </div>
+        <footer class="border-t border-gray-400 fixed w-full left-0 bottom-0  ">
+        <div class="flex flex-wrap justify-center ">
+          <ul class="flex items-center">
+            Made by Jonathan Yee
+          </ul>
+        </div>
+    </footer>
       </>
       );
     }
     else if(this.state.currentPage === 'Sheets'){
-      currentPage.push(<Sheets value={this.state.numberToPrint} handleClickStartBingo={this.handleClickStartBingo} handleClickGoToMenu={this.handleClickGoToMenu}/>);
+      currentPage.push(<CardsToPrint value={this.state.numberToPrint} handleClickStartBingo={this.handleClickStartBingo} handleClickGoToMenu={this.handleClickGoToMenu}/>);
     }
     else if(this.state.currentPage === 'Game'){
       currentPage.push(<Game handleClickGoToMenu={this.handleClickGoToMenu}/>);
@@ -385,6 +410,8 @@ class Menu extends React.Component{
     );
   }
 }
+
+
 function App() {
   return (
     <>
