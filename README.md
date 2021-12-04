@@ -1,6 +1,6 @@
 # Bingo calling and bingo card generation website built in React. 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). Play it at https://thecountofperu.github.io/bingo/
+Play it at https://thecountofperu.github.io/bingo/. This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). TailwindCSS was used for the CSS.
 
 # Development Instructions
  To run this website on your computer:
